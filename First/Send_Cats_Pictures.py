@@ -3,7 +3,7 @@ import time
 
 api_url = 'https://api.telegram.org/bot'
 api_cats_url = 'https://aws.random.cat/meow'
-bot_token = '5766895641:AAEIO8KcbbNU-jpOsHcjduDN3k04IzBZn1I'
+bot_token = 'BOT TOKEN'
 text: str = 'Новый апдейт!'
 error_text: str = 'Что-то пошло не так, и котов сегодня не будет'
 

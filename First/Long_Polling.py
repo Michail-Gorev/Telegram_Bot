@@ -2,7 +2,7 @@ import requests
 import time
 
 API_URL: str = 'https://api.telegram.org/bot'
-BOT_TOKEN: str = '5766895641:AAEIO8KcbbNU-jpOsHcjduDN3k04IzBZn1I'
+BOT_TOKEN: str = 'BOT TOKEN'
 API_CATS_URL: str = 'https://aws.random.cat/meow'
 ERROR_TEXT: str = 'Котов сегодня не будет, что-то пошло не так...'
 
