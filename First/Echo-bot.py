@@ -3,7 +3,7 @@ from aiogram.dispatcher.filters import Command
 from aiogram.types import Message, ContentType
 
 
-API_TOKEN: str = 'BOT TOKEN'
+API_TOKEN: str = '5766895641:AAEIO8KcbbNU-jpOsHcjduDN3k04IzBZn1I'
 
 # Создаем объекты бота и диспетчера
 bot: Bot = Bot(token=API_TOKEN)
@@ -29,8 +29,11 @@ async def send_photo_echo(message: Message):
 # Этот хэндлер будет срабатывать на любые ваши текстовые сообщения,
 # кроме команд "/start" и "/help"
 async def send_echo(message: Message):
-    await message.reply(text=message.text)
-
+    try:
+        await message.send_copy(chat_id=message.chat.id)
+    except TypeError:
+        await message.reply(text='Данный тип апдейтов не поддерживается '
+                                 'методом send_copy')
 
 # Регистрируем хэндлеры
 dp.message.register(process_start_command, Command(commands=["start"]))
