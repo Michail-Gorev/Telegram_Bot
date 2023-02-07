@@ -16,8 +16,6 @@ dp: Dispatcher = Dispatcher()
 # Количество попыток, доступных пользователю в игре
 ATTEMPTS: int = 4
 
-
-
 # Словарь, в котором будут храниться данные пользователя
 user: dict = {'in_game': False,
               'secret_word': '',
@@ -25,8 +23,7 @@ user: dict = {'in_game': False,
               'total_games': 0,
               'wins': 0}
 
-
-# Функция возвращающая случайное целое число от 1 до 2000
+# Функция возвращающая случайное целое число от 0 до 1999
 def get_random_number() -> int:
     return random.randint(0, 1999)
 def get_random_word() -> str:
@@ -111,7 +108,6 @@ async def process_negative_answer(message: Message):
 @dp.message()
 async def process_text_answer(message: Message):
     if user['in_game']:
-        #word = user['secret_word'].split()[0]
         trans1 = user['secret_word'].split()[1]
         trans2 = user['secret_word'].split()[2]
         if str(message.text) == trans1 or str(message.text) == trans2 or str(message.text) == trans1 + " " + trans2:
