@@ -38,7 +38,7 @@ def get_random_word() -> str:
             f.readline()
             count +=1
         word = f.readline()
-        print(word.split()[1])
+        print(word.split()[1], word.split()[2])
         return word
 # Этот хэндлер будет срабатывать на команду "/start"
 @dp.message(Command(commands=['start']))
@@ -112,8 +112,9 @@ async def process_negative_answer(message: Message):
 async def process_text_answer(message: Message):
     if user['in_game']:
         #word = user['secret_word'].split()[0]
-        trans = user['secret_word'].split()[1]
-        if str(message.text) == trans:
+        trans1 = user['secret_word'].split()[1]
+        trans2 = user['secret_word'].split()[2]
+        if str(message.text) == trans1 or str(message.text) == trans2 or str(message.text) == trans1 + " " + trans2:
             await message.answer('Ура!!! Вы верно назвали перевод!\n\n'
                                  'Может, сыграем еще?')
             user['in_game'] = False
