@@ -27,7 +27,6 @@ user: dict = {'in_game': False,
 def get_random_number() -> int:
     return random.randint(0, 1999)
 def get_random_word() -> str:
-    word = []
     with open('Dictionary.txt', 'r', encoding='utf8') as f:
         num: int = get_random_number()
         count: int = 0
@@ -35,12 +34,12 @@ def get_random_word() -> str:
             f.readline()
             count +=1
         word = f.readline()
-        print(word.split()[1], word.split()[2])
+        print(word.split()[1])
         return word
 # Этот хэндлер будет срабатывать на команду "/start"
 @dp.message(Command(commands=['start']))
 async def process_start_command(message: Message):
-    await message.answer('Привет!\nДавай сыграем в игру "Угадай число"?\n\n'
+    await message.answer('Привет!\nДавай сыграем в игру "Угадай перевод"?\n\n'
                          'Чтобы получить правила игры и список доступных '
                          'команд - отправьте команду /help')
 
@@ -50,7 +49,7 @@ async def process_start_command(message: Message):
 async def process_help_command(message: Message):
     await message.answer(f'Правила игры:\n\nЯ загадываю английское слово, '
                          f'а вам нужно назвать его перевод\nУ вас есть {ATTEMPTS} '
-                         f'попыток\n\nДоступные команды:\n/help - правила '
+                         f'попытки\n\nДоступные команды:\n/help - правила '
                          f'игры и список команд\n/cancel - выйти из игры\n'
                          f'/stat - посмотреть статистику\n\nДавай сыграем?')
 
@@ -81,7 +80,10 @@ async def process_cancel_command(message: Message):
 async def process_positive_answer(message: Message):
     if not user['in_game']:
         user['secret_word'] = get_random_word()
-        word_for_print = user['secret_word'].split()[0]
+        if(len(user['secret_word'].split()) <= 3):
+            word_for_print = user['secret_word'].split()[0]
+        if(len(user['secret_word'].split()) > 3):
+            word_for_print = user['secret_word'].split()[0] + ' ' + user['secret_word'].split()[1]
         await message.answer(f'Ура!\n\nЯ загадал английское слово: {word_for_print}, '
                              f'попробуй угадать перевод!\n'
                              f'Ответ пиши без дополнительных знаков, с маленькой буквы!')
@@ -108,18 +110,42 @@ async def process_negative_answer(message: Message):
 @dp.message()
 async def process_text_answer(message: Message):
     if user['in_game']:
-        trans1 = user['secret_word'].split()[1]
-        trans2 = user['secret_word'].split()[2]
-        if str(message.text) == trans1 or str(message.text) == trans2 or str(message.text) == trans1 + " " + trans2:
-            await message.answer('Ура!!! Вы верно назвали перевод!\n\n'
-                                 'Может, сыграем еще?')
-            user['in_game'] = False
-            user['total_games'] += 1
-            user['wins'] += 1
-        elif str(message.text) != user['secret_word'].split()[1]:
-            await message.answer('So sad, your option is incorrect( Try again!')
-            user['attempts'] -= 1
-
+        stroke_length = len(user['secret_word'].split())
+        if(stroke_length == 2):
+            trans1 = user['secret_word'].split()[1]
+            if str(message.text) == trans1:
+                await message.answer('Ура!!! Вы верно назвали перевод!\n\n'
+                                     'Может, сыграем еще?')
+                user['in_game'] = False
+                user['total_games'] += 1
+                user['wins'] += 1
+            else:
+                await message.answer('So sad, your option is incorrect( Try again!')
+                user['attempts'] -= 1
+        if(stroke_length == 3):
+            trans1 = user['secret_word'].split()[1]
+            trans2 = user['secret_word'].split()[2]
+            if str(message.text) == trans1 or str(message.text) == trans2 or str(message.text) == trans1 + ' ' + trans2:
+                await message.answer('Ура!!! Вы верно назвали перевод!\n\n'
+                                     'Может, сыграем еще?')
+                user['in_game'] = False
+                user['total_games'] += 1
+                user['wins'] += 1
+            else:
+                await message.answer('So sad, your option is incorrect( Try again!')
+                user['attempts'] -= 1
+        if(stroke_length == 4):
+            trans1 = user['secret_word'].split()[2]
+            trans2 = user['secret_word'].split()[3]
+            if str(message.text) == trans1 or str(message.text) == trans2 or str(message.text) == trans1 + ' ' + trans2:
+                await message.answer('Ура!!! Вы верно назвали перевод!\n\n'
+                                     'Может, сыграем еще?')
+                user['in_game'] = False
+                user['total_games'] += 1
+                user['wins'] += 1
+            else:
+                await message.answer('So sad, your option is incorrect( Try again!')
+                user['attempts'] -= 1
         if user['attempts'] == 0:
             await message.answer(f'К сожалению, у вас больше не осталось '
                                  f'попыток. Вы проиграли :(\n\nПеревод слова '
