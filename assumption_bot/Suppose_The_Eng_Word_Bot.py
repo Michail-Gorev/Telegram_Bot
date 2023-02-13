@@ -5,8 +5,7 @@ from aiogram.types import Message
 from aiogram.dispatcher.filters import Text, Command
 
 
-# Вместо BOT TOKEN HERE нужно вставить токен вашего бота,
-# полученный у @BotFather
+# Вместо PUT_THE_BOT_TOKEN_HERE нужно вставить токен вашего бота 
 BOT_TOKEN: str = 'PUT_THE_BOT_TOKEN_HERE'
 
 # Создаем объекты бота и диспетчера
@@ -23,9 +22,11 @@ user: dict = {'in_game': False,
               'total_games': 0,
               'wins': 0}
 
-# Функция возвращающая случайное целое число от 0 до 1999
+# Функция, возвращающая случайное целое число от 0 до 1999
+#Требуется для подбора носера слова в словаре
 def get_random_number() -> int:
     return random.randint(0, 1999)
+# Функция, возвращающее случайное слово из словаря
 def get_random_word() -> str:
     with open('Dictionary.txt', 'r', encoding='utf8') as f:
         num: int = get_random_number()
@@ -36,7 +37,7 @@ def get_random_word() -> str:
         word = f.readline()
         print(word.split()[1])
         return word
-# Этот хэндлер будет срабатывать на команду "/start"
+# Хэндлер на команду "/start"
 @dp.message(Command(commands=['start']))
 async def process_start_command(message: Message):
     await message.answer('Привет!\nДавай сыграем в игру "Угадай перевод"?\n\n'
@@ -44,7 +45,7 @@ async def process_start_command(message: Message):
                          'команд - отправьте команду /help')
 
 
-# Этот хэндлер будет срабатывать на команду "/help"
+# Хэндлер на команду "/help"
 @dp.message(Command(commands=['help']))
 async def process_help_command(message: Message):
     await message.answer(f'Правила игры:\n\nЯ загадываю английское слово, '
@@ -54,7 +55,7 @@ async def process_help_command(message: Message):
                          f'/stat - посмотреть статистику\n\nДавай сыграем?')
 
 
-# Этот хэндлер будет срабатывать на команду "/stat"
+# Хэндлер на команду "/stat"
 @dp.message(Command(commands=['stat']))
 async def process_stat_command(message: Message):
     await message.answer(f'Всего игр сыграно: {user["total_games"]}\n'
@@ -62,7 +63,7 @@ async def process_stat_command(message: Message):
                          f'Процент побед: {user["wins"]/user["total_games"]}')
 
 
-# Этот хэндлер будет срабатывать на команду "/cancel"
+# Хэндлер на команду "/cancel"
 @dp.message(Command(commands=['cancel']))
 async def process_cancel_command(message: Message):
     if user['in_game']:
@@ -74,7 +75,7 @@ async def process_cancel_command(message: Message):
                              'Может, сыграем разок?')
 
 
-# Этот хэндлер будет срабатывать на согласие пользователя сыграть в игру
+# Хэндлер на согласие пользователя сыграть в игру
 @dp.message(Text(text=['Да', 'Давай', 'Сыграем', 'Игра',
                        'Играть', 'Хочу играть'], ignore_case=True))
 async def process_positive_answer(message: Message):
@@ -102,7 +103,7 @@ async def process_positive_answer(message: Message):
                              'и команды /cancel и /stat')
 
 
-# Этот хэндлер будет срабатывать на отказ пользователя сыграть в игру
+# Хэндлер на отказ пользователя сыграть в игру
 @dp.message(Text(text=['Нет', 'Не', 'Не хочу', 'Не буду'], ignore_case=True))
 async def process_negative_answer(message: Message):
     if not user['in_game']:
@@ -113,7 +114,7 @@ async def process_negative_answer(message: Message):
                              'пожалуйста, перевод слов')
 
 
-# Этот хэндлер будет срабатывать на отправку пользователем чисел от 1 до 100
+# Хэндлер на отправку пользователем ответа (слова)
 @dp.message()
 async def process_text_answer(message: Message):
     if user['in_game']:
