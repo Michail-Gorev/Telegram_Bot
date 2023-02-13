@@ -7,7 +7,7 @@ from aiogram.dispatcher.filters import Text, Command
 
 # Вместо BOT TOKEN HERE нужно вставить токен вашего бота,
 # полученный у @BotFather
-BOT_TOKEN: str = '5766895641:AAEIO8KcbbNU-jpOsHcjduDN3k04IzBZn1I'
+BOT_TOKEN: str = 'BOT TOKEN HERE'
 
 # Создаем объекты бота и диспетчера
 bot: Bot = Bot(BOT_TOKEN)
